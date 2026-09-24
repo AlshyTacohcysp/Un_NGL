@@ -43,7 +43,7 @@ export default function HeroSection() {
           viewport={{ once: true }}
           className="mb-8 text-5xl font-black text-white md:mb-12 md:text-8xl md:leading-32 lg:text-9xl"
         >
-          No cap
+          UnGNL
           <br />
           <motion.span
             initial={{ opacity: 0, y: 20 }}

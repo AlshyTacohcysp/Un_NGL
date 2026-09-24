@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import DemoLab from "./demo-lab";
 
 export const metadata: Metadata = {
-  title: "No Cap | Colour-hint lab",
+  title: "UnGNL | Colour-hint lab",
   description:
-    "See exactly how No Cap colour hints work. No account, nothing stored.",
+    "See exactly how UnGNL colour hints work. No account, nothing stored.",
 };
 
 export default function DemoPage() {

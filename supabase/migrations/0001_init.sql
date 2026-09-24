@@ -1,4 +1,4 @@
--- No Cap — initial schema (the upstream repo shipped no SQL; this file is the
+-- UnGNL — initial schema (the upstream repo shipped no SQL; this file is the
 -- canonical schema). Run once against the Supabase project (SQL editor or
 -- `supabase db push`).
 --

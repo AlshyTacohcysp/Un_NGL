@@ -271,7 +271,7 @@ export default function DemoLab() {
               most 6 colours.
             </li>
             <li>
-              It is not a name and not a proof. No Cap never claims to know who
+              It is not a name and not a proof. UnGNL never claims to know who
               wrote a message.
             </li>
           </ul>

@@ -23,9 +23,9 @@ export async function generateMetadata({
   if (!profile) return {};
 
   return {
-    title: `No Cap | @${profile.username}`,
+    title: `UnGNL | @${profile.username}`,
     description:
-      profile.bio || `Message @${profile.username} anonymously on No Cap.`,
+      profile.bio || `Message @${profile.username} anonymously on UnGNL.`,
   };
 }
 

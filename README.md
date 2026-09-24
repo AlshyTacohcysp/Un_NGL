@@ -1,19 +1,24 @@
 <div align="center">
 
-# 🕵️‍♂️ No cap
+# 🔏 UnGNL
 
-App similar to ngl.link — share your link to get honest, anonymous questions and feedback.
+Anonymous messages, honestly. Share your profile link, get honest questions and
+feedback — with a colour hint that is **not** an identity.
 
 ![desktop screenshot](./public/preview.png)
-
-**Try it here** 👉 [thenocap.vercel.app](https://thenocap.vercel.app)
 
 </div>
 
 ## ✨ Features
 
-- **Anonymous Q&A**: Anyone can send you questions or feedback—no account needed
+- **Anonymous Q&A**: Anyone can send you questions or feedback — no account needed
 - **Unique Profile Links**: Share your link anywhere to start receiving messages
+- **Colour hints, not identities**: each message gets a pastille extracted from
+  *your* photo. Same browser → often the same colour. Several strangers share
+  one colour. It is not a name, not a proof — UnGNL never claims to know who
+  wrote a message
+- **Colour-hint lab** (`/demo`): try the exact pipeline (sharp → node-vibrant →
+  OKLab filter, max 6 colours) without an account
 - **Real-Time Inbox**: Read and manage messages instantly
 - **Profile Controls**: Toggle message reception, check username availability
 - **Modern UI**: Built with Next.js, Tailwind, Shadcn-UI, and Squircle.js
@@ -21,33 +26,34 @@ App similar to ngl.link — share your link to get honest, anonymous questions a
 
 ## 🧰 Tech Stack
 
-- Next.js 15
+- Next.js 15 (pinned 15.3.8)
 - React 19
 - TypeScript
 - Tailwind CSS
-- Supabase
+- Supabase (SSR, Auth, Storage)
 - Shadcn UI
 - Tanstack Query
 - Zod
 - Motion
+- sharp + node-vibrant (colour-hint palette)
 
 ## 💻 Getting Started
 
 1. Clone the repository
 2. Install dependencies:
    ```bash
-   pnpm install
+   corepack pnpm install
    ```
-3. Set up your `.env` with Supabase keys:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
-4. Run the dev server:
+3. Set up your `.env.local` from `.env.example` (Supabase keys + `HINT_SECRET`)
+4. Apply `supabase/migrations/0001_init.sql` to your Supabase project
+5. Run the dev server:
    ```bash
-   pnpm dev
+   corepack pnpm dev
    ```
-5. Open [http://localhost:3000](http://localhost:3000)
+6. Open [http://localhost:3000](http://localhost:3000) and try `/demo`
+
+See [MVP.md](./MVP.md) for the full state of the MVP (schema, colour-hint
+mechanics, env vars, OAuth URLs, out-of-scope list).
 
 ## 🛠️ Development
 
@@ -62,17 +68,10 @@ MIT
 
 ## 💙 Acknowledgements
 
+UnGNL is a fork of [handshek/nocap](https://github.com/handshek/nocap) (MIT),
+itself forked from [buneeIsSlo/nocap](https://github.com/buneeIsSlo/nocap).
+
 - [Supabase](https://supabase.com/)
 - [Squircle.js](https://squircle.js.org/)
-- [Shadcn-UI](https://ui.shadcn.com)
+- [Shadcn UI](https://ui.shadcn.com)
 - [Tanstack Query](https://tanstack.com/query/latest)
-
-<div align="center">
-
-<strong>⭐ Leave a star maybe? ⭐</strong>
-
-<a href="https://github.com/buneeIsSlo/nocap">Source</a>
-| <a href="https://twitter.com/awwbhi2" target="_blank">Twitter</a>
-| <a href="https://github.com/buneeIsSlo" target="_blank">GitHub</a>
-
-</div>
