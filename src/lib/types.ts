@@ -5,4 +5,6 @@ export interface Profile {
   bio: string | null;
   avatar: string | null;
   accepting_messages: boolean;
+  /** Colour-hint palette extracted from the avatar photo (max 6). */
+  palette: string[] | null;
 }

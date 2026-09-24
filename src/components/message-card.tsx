@@ -11,6 +11,8 @@ interface MessageCardProps extends React.ComponentPropsWithoutRef<"div"> {
   name?: string;
   time: string;
   avatarSrc?: string;
+  /** Colour hint snapshotted at send time — NOT an identity. */
+  hintColor?: string | null;
   onDelete?: () => void;
 }
 
@@ -19,6 +21,7 @@ export function MessageCard({
   name = "Anonymous",
   time,
   avatarSrc,
+  hintColor,
   className,
   onDelete,
   ...props
@@ -63,6 +66,14 @@ export function MessageCard({
               {name !== "Anonymous" && name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
+          {hintColor && (
+            <span
+              title="Colour hint from their photo — not an identity. Same browser often shares a colour, and strangers can share one."
+              aria-label="Colour hint (not an identity)"
+              className="inline-block size-3 shrink-0 rounded-full border border-black/10"
+              style={{ backgroundColor: hintColor }}
+            />
+          )}
           <p className="text-sm font-semibold text-neutral-500">{name}</p>
           <span className="text-muted-foreground font-semibold">·</span>
           <span className="text-muted-foreground text-xs font-semibold">

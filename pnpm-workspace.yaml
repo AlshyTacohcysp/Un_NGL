@@ -1,0 +1,6 @@
+# Single-package repo. These settings allow postinstall build scripts for
+# native deps (pnpm 10+ blocks them by default; pnpm 12 makes it a hard error).
+allowBuilds:
+  "@tailwindcss/oxide": true
+  sharp: true
+  unrs-resolver: true

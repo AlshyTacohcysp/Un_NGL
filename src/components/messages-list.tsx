@@ -167,6 +167,11 @@ export default function MessagesList({
   return (
     <>
       <div ref={topOfListRef} />
+      <p className="text-muted-foreground mx-auto max-w-2xl pt-6 text-center text-xs">
+        Pastilles are colour hints from your photo — not identities. The same
+        browser often shows the same colour, and different strangers can share
+        one. A colour is not a name, not a proof.
+      </p>
       {newMessages && newMessages.length > 0 && (
         <div className="sticky top-0 z-30 flex justify-center pt-8">
           <motion.div
@@ -213,6 +218,7 @@ export default function MessagesList({
               <MessageCard
                 question={msg.content}
                 time={getRelativeTime(msg.created_at)}
+                hintColor={msg.hint_color ?? null}
                 name={
                   msg.is_sender_visible
                     ? (msg.sender_id ?? "Anonymous")
