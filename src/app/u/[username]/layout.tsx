@@ -7,7 +7,7 @@ async function getProfileByUsername(username: string) {
   const supabase = await createClient();
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, username, avatar, bio, created_at, accepting_messages")
+    .select("id, username, avatar, bio, created_at, accepting_messages, palette")
     .eq("username", username)
     .single();
   return profile;
@@ -23,9 +23,9 @@ export async function generateMetadata({
   if (!profile) return {};
 
   return {
-    title: `No Cap | @${profile.username}`,
+    title: `UnGNL | @${profile.username}`,
     description:
-      profile.bio || `Message @${profile.username} anonymously on No Cap.`,
+      profile.bio || `Message @${profile.username} anonymously on UnGNL.`,
   };
 }
 

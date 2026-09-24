@@ -44,6 +44,7 @@ export default function ProfileView({
     defaultValues: { content: "" },
   });
   const [success, setSuccess] = useState(false);
+  const [sentHint, setSentHint] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [signInOpen, setSignInOpen] = useState(false);
   const router = useRouter();
@@ -62,8 +63,9 @@ export default function ProfileView({
       if (!res.ok) throw await res.json();
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (data: { hint_color?: string | null }) => {
       setSuccess(true);
+      setSentHint(data?.hint_color ?? null);
       setErrorMsg(null);
       form.reset();
       toast.success("Message sent!");
@@ -171,7 +173,24 @@ export default function ProfileView({
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
                       >
-                        Message sent anonymously!
+                        <span className="flex items-center justify-center gap-2">
+                          Message sent anonymously!
+                          {sentHint && (
+                            <span
+                              title="Colour hint — not an identity"
+                              aria-label="Colour hint (not an identity)"
+                              className="inline-block size-3 rounded-full border border-black/10"
+                              style={{ backgroundColor: sentHint }}
+                            />
+                          )}
+                        </span>
+                        {sentHint && (
+                          <span className="mt-1 block text-xs font-medium text-neutral-500">
+                            This pastille is a colour hint from their photo —
+                            not an identity. Same browser often means the same
+                            colour, and strangers can share one.
+                          </span>
+                        )}
                       </motion.span>
                     )}
                     {errorMsg && (
@@ -188,6 +207,11 @@ export default function ProfileView({
                   </AnimatePresence>
                 </form>
               </Form>
+              <p className="text-muted-foreground mt-3 w-full text-center text-xs">
+                Messages are anonymous. The colour pastille is a hint extracted
+                from their photo — not a name, not a proof, never “we know who
+                wrote this”.
+              </p>
             </div>
           </Card>
         </Squircle>

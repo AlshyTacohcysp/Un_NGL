@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Squircle } from "@squircle-js/react";
 import { SignInDialog } from "@/components/sign-in-dialog";
@@ -42,7 +43,7 @@ export default function HeroSection() {
           viewport={{ once: true }}
           className="mb-8 text-5xl font-black text-white md:mb-12 md:text-8xl md:leading-32 lg:text-9xl"
         >
-          No cap
+          UnGNL
           <br />
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -76,6 +77,20 @@ export default function HeroSection() {
               Start receiving Questions
             </Button>
           </Squircle>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          viewport={{ once: true }}
+          className="mt-6"
+        >
+          <Link
+            href="/demo"
+            className="text-sm font-semibold text-white/80 underline-offset-4 hover:underline"
+          >
+            or see how the colour hint works in the lab →
+          </Link>
         </motion.div>
       </div>
 

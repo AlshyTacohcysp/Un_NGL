@@ -1,0 +1,16 @@
+import type { Metadata } from "next";
+import DemoLab from "./demo-lab";
+
+export const metadata: Metadata = {
+  title: "UnGNL | Colour-hint lab",
+  description:
+    "See exactly how UnGNL colour hints work. No account, nothing stored.",
+};
+
+export default function DemoPage() {
+  return (
+    <main className="bg-main-gradient min-h-screen w-full">
+      <DemoLab />
+    </main>
+  );
+}

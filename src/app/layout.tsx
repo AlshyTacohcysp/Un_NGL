@@ -20,8 +20,9 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "No Cap",
-  description: "Send and receive messages anonymously",
+  title: "UnGNL",
+  description:
+    "Send and receive anonymous messages. The colour hint is not an identity.",
 };
 
 export default function RootLayout({

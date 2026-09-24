@@ -33,7 +33,7 @@ export function SignInDialog({ open, onOpenChange }: SignInDialogProps) {
       <Squircle asChild cornerRadius={24} cornerSmoothing={1}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Welcome to No Cap</DialogTitle>
+            <DialogTitle>Welcome to UnGNL</DialogTitle>
             <DialogDescription>
               Sign in to start receiving anonymous messages
             </DialogDescription>

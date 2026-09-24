@@ -24,7 +24,6 @@ import { useRouter } from "next/navigation";
 import { Loader2, X } from "lucide-react";
 import useDebouncedValue from "@/hooks/useDebounceValue";
 import UsernameStatus from "@/components/username-status";
-import { createClient } from "@/utils/supabase/client";
 
 const profileSchema = z.object({
   username: z
@@ -46,9 +45,6 @@ const profileSchema = z.object({
 
 type ProfileForm = z.infer<typeof profileSchema>;
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
-const STORAGE_BUCKET_NAME = "nocap";
-
 export default function EditProfileForm({
   profile,
   onClose,
@@ -57,6 +53,7 @@ export default function EditProfileForm({
   onClose: () => void;
 }) {
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar || "");
+  const [palette, setPalette] = useState<string[]>(profile.palette ?? []);
   const [usernameToCheck, setUsernameToCheck] = useState(
     profile.username || "",
   );
@@ -96,41 +93,30 @@ export default function EditProfileForm({
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileForm) => {
-      let avatarUrlToSave = profile.avatar || "";
-
+      // Avatar (and its palette) can ONLY change through POST
+      // /api/profile/avatar — never through the profile update route.
       if (data.avatar instanceof File) {
-        const supabase = createClient();
-        const fileExt = data.avatar.name.split(".").pop();
-        const filePath = `avatars/${profile.id}_${Date.now()}.${fileExt}`;
-
-        if (profile.avatar && profile.avatar.startsWith(`${STORAGE_URL}`)) {
-          const oldPath = profile.avatar.split(`${STORAGE_BUCKET_NAME}/`)[1];
-          if (oldPath) {
-            await supabase.storage.from(STORAGE_BUCKET_NAME).remove([oldPath]);
-          }
+        const formData = new FormData();
+        formData.append("file", data.avatar);
+        const avatarRes = await fetch("/api/profile/avatar", {
+          method: "POST",
+          body: formData,
+        });
+        const avatarJson = await avatarRes.json();
+        if (!avatarRes.ok) throw avatarJson;
+        setAvatarUrl(avatarJson.avatar || "");
+        if (Array.isArray(avatarJson.palette)) {
+          setPalette(avatarJson.palette);
         }
-
-        const { error } = await supabase.storage
-          .from(`${STORAGE_BUCKET_NAME}`)
-          .upload(filePath, data.avatar, {
-            cacheControl: "3600",
-            upsert: true,
-          });
-
-        if (error) {
-          throw { error: "Failed to upload avatar" };
-        }
-
-        avatarUrlToSave = `${STORAGE_URL}/object/public/${STORAGE_BUCKET_NAME}/avatars/${encodeURIComponent(filePath.replace("avatars/", ""))}`;
       }
+
+      // The body has no `id` (ignored server-side) and no avatar/palette.
       const response = await fetch("/api/profile/update", {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
-          id: profile.id,
           username: data.username,
           bio: data.bio,
-          avatar: avatarUrlToSave,
         }),
       });
 
@@ -183,6 +169,31 @@ export default function EditProfileForm({
               {profile.username?.[0]?.toUpperCase() ?? "?"}
             </AvatarFallback>
           </Avatar>
+          <div className="mb-2 w-full">
+            {palette.length > 0 ? (
+              <>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {palette.map((color) => (
+                    <span
+                      key={color}
+                      title={color}
+                      className="inline-block size-4 rounded-full border border-black/10"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+                <p className="text-muted-foreground mt-1 text-xs">
+                  Colour-hint palette extracted from your photo. Changing your
+                  photo does NOT recolour past messages.
+                </p>
+              </>
+            ) : (
+              <p className="text-muted-foreground text-xs">
+                Upload a photo to create the colour-hint palette (used for the
+                pastilles on your messages).
+              </p>
+            )}
+          </div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -197,12 +208,12 @@ export default function EditProfileForm({
                     <FormControl>
                       <Input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            if (file.size > 1024 * 1024) {
-                              toast.error("Image must be 1MB or less");
+                            if (file.size > 2 * 1024 * 1024) {
+                              toast.error("Image must be 2MB or less");
                               e.target.value = "";
                               return;
                             }
@@ -215,7 +226,8 @@ export default function EditProfileForm({
                       />
                     </FormControl>
                     <FormDescription>
-                      Click to upload a new avatar image.
+                      JPEG, PNG, WebP or GIF — 2MB max. Your photo gives the
+                      messages you receive their colour-hint pastilles.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
